@@ -55,10 +55,6 @@ TupleType<T...> parse(const std::string& str) {
     return tuple;
 }
 
-template<int idx>
-void printTuple([[maybe_unused]] const std::tuple<>& tuple, [[maybe_unused]] std::ostream& os) { }
-
-
 int main() {
 
     auto tuple = parse<std::tuple, int, double, std::string, bool>("666,6.9,pseudosacrosanct perversion,true");
@@ -78,5 +74,8 @@ int main() {
     fp::tuple<int, std::string, bool> empty;
     std::cout << parsed << std::endl;
     std::cout << manuallyConstructed << std::endl;
+
+    std::cout << "parsed.get<2>(): " << parsed.get<2>() << std::endl;
+    std::cout << "std::get<1>(parsed): " << std::get<1>(parsed) << std::endl;
 
 }

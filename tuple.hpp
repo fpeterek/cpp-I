@@ -9,9 +9,6 @@ namespace {
 template<int idx, typename... Ts>
 struct tuple_impl {
 
-    template<int x, int get_idx, typename... get_ts, bool>
-    friend auto get_impl(tuple_impl<idx, Ts...>& t);
-
     tuple_impl() = default;
 
     void print(std::ostream& os) const;
