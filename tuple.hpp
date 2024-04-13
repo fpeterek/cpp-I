@@ -54,7 +54,7 @@ T& get_impl(tuple_impl<idx, T, Ts...>& t) {
 } // namespace
 
 template<typename... Ts>
-class tuple : protected tuple_impl<0, Ts...> {
+class tuple : tuple_impl<0, Ts...> {
 
     void print(std::ostream& os) const {
         os << "fp::tuple { ";
