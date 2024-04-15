@@ -1,3 +1,6 @@
+#ifndef TUPLE_HPP
+#define TUPLE_HPP
+
 #include <ostream>
 #include <utility>
 
@@ -93,3 +96,5 @@ namespace std {
         return tuple.template get<idx>();
     }
 }
+
+#endif // TUPLE_HPP
