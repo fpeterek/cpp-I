@@ -5,6 +5,7 @@
 #include <chrono>
 #include <mutex>
 #include <condition_variable>
+#include <vector>
 
 
 class Queue {
@@ -25,7 +26,7 @@ public:
     Queue(std::initializer_list<int> initVals) : data(std::move(initVals)) { }
 
     void enqueue(const int val) {
-        std::unique_lock lock { mutex };
+        std::lock_guard lock { mutex };
         data.emplace_back(val);
         var.notify_one();
     }
