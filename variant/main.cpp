@@ -65,4 +65,8 @@ int main() {
     std::println("fp::get<int>(var) = {}", fp::get<int>(var));
     std::println();
 
+    var = S{69};
+    std::println();
+    std::println("Post assignment. main() should now exit, we expect ~S() to be called.");
+    std::println();
 }
