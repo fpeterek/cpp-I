@@ -44,6 +44,15 @@ int main() {
     std::println("fp::get<float>(var) = {}", fp::get<float>(var));
     std::println();
 
+    decltype(var) var2{13};
+    std::println();
+    std::println("fp::get<int>(var2) = {}", fp::get<int>(var2));
+
+    var2 = var;
+    std::println("var2 = var;");
+    std::println("fp::get<float>(var2) = {}", fp::get<float>(var2));
+    std::println();
+
     var = std::string("jebat javascript");
     std::println();
     std::println("fp::get<std::string>(var) = {}", fp::get<std::string>(var));
@@ -58,6 +67,12 @@ int main() {
     std::println();
     std::println("assigning fp::get<S>(var).x = 1987;");
     std::println("fp::get<S>(var).x = {}", fp::get<S>(var).x);
+    std::println();
+    std::println("var2 = var;");
+    std::println();
+    var2 = var;
+    std::println();
+    std::println("fp::get<S>(var2).x = {}", fp::get<S>(var2).x);
     std::println();
 
     var = 1899;

@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <type_traits>
 #include <utility>
 
 
@@ -18,13 +19,14 @@ namespace fp {
         size_t active;
         std::byte buffer[buff_size];
 
-        std::byte* get_buff() { return buffer; }
+        auto* get_buff(this auto& self) { return self.buffer; }
 
     };
 
     template<size_t idx, size_t buff_size, typename T, typename... Ts>
     struct variant_impl<idx, buff_size, T, Ts...> : variant_impl<idx+1, buff_size, Ts...> {
 
+        using self_t = variant_impl<idx, buff_size, T, Ts...>;
         using parent = variant_impl<idx+1, buff_size, Ts...>;
         using base = variant_impl<idx+sizeof...(Ts)+1, buff_size>;
 
@@ -58,10 +60,12 @@ namespace fp {
         }
 
 
-        parent& get_parent() { return *this; }
-        auto* get_buff() { return get_parent().get_buff(); }
+        base&         get_base()         { return *this; }
+        base const&   get_base()   const { return *this; }
+        parent&       get_parent()       { return *this; }
+        parent const& get_parent() const { return *this; }
 
-        base& get_base() { return *this; }
+        auto* get_buff(this auto& self) { return self.get_parent().get_buff(); }
 
         void clear_current() {
             if (is_active()) {
@@ -74,11 +78,16 @@ namespace fp {
             }
         }
 
+
         T& get() {
             return *reinterpret_cast<T*>(get_buff());
         }
 
-        bool is_active() {
+        const T& get() const {
+            return *reinterpret_cast<const T*>(get_buff());
+        }
+
+        bool is_active() const {
             return get_base().active == idx;
         }
 
@@ -110,16 +119,16 @@ namespace fp {
             assign(val);
         }
 
-        void operator=(const parent& other) {
-            if (other.is_active) {
+        void operator=(const self_t& other) {
+            if (other.is_active()) {
                 assign(other.get());
             } else {
                 get_parent() = other.get_parent();
             }
         }
 
-        void operator=(parent&& other) {
-            if (other.is_active) {
+        void operator=(self_t&& other) {
+            if (other.is_active()) {
                 assign(std::move(other.get()));
             } else {
                 get_parent() = std::move(other.get_parent());
@@ -214,7 +223,7 @@ namespace fp {
     }
 
     template<typename T, typename... Ts>
-    bool& has(::fp::variant<Ts...>& var) {
+    bool& has(fp::variant<Ts...>& var) {
         return fp::has_impl<T>(var);
     }
 } // namespace fp
