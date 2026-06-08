@@ -17,6 +17,7 @@ namespace fp {
     struct variant_impl<idx, buff_size> {
 
         size_t active;
+        // TODO: Alignment
         std::byte buffer[buff_size];
 
         auto* get_buff(this auto& self) { return self.buffer; }
